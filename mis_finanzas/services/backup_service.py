@@ -71,8 +71,10 @@ def crear_respaldo(usuario_id: int, sufijo: str = "") -> Respaldo:
 
 def validar_archivo_respaldo(ruta: Path) -> Optional[str]:
     """Devuelve un mensaje de error si el archivo no es un respaldo válido."""
-    if not ruta.exists() or ruta.stat().st_size < 100:
+    if not ruta.exists() or ruta.stat().st_size == 0:
         return "El archivo está vacío o no existe."
+    if ruta.stat().st_size < 100:
+        return "El archivo no es una base de datos SQLite válida."
     with ruta.open("rb") as f:
         if f.read(16) != _CABECERA_SQLITE:
             return "El archivo no es una base de datos SQLite válida."

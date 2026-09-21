@@ -100,6 +100,7 @@
 
       {% if respaldos %}
       <h3>Respaldos recientes</h3>
+      <div class="tabla-envoltorio">
       <table class="tabla">
         <thead><tr><th>Archivo</th><th>Fecha</th><th>Tamaño</th><th></th></tr></thead>
         <tbody>
@@ -113,12 +114,14 @@
           {% endfor %}
         </tbody>
       </table>
+      </div>
       {% endif %}
     </section>
 
     <section class="tarjeta" id="auditoria">
       <h2>{{ icono('report') }} Actividad de seguridad reciente</h2>
       {% if eventos %}
+      <div class="tabla-envoltorio">
       <table class="tabla">
         <thead><tr><th>Evento</th><th>Detalle</th><th>Fecha</th></tr></thead>
         <tbody>
@@ -131,6 +134,7 @@
           {% endfor %}
         </tbody>
       </table>
+      </div>
       {% else %}
       <p class="texto-suave">Todavía no hay eventos registrados.</p>
       {% endif %}

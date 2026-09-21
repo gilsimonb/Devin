@@ -292,9 +292,13 @@ select { width: auto; padding: .55rem .75rem; }
 .fila-config { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; padding: 1rem 0; border-top: 1px solid var(--gris-200); }
 .fila-config > div:first-child { flex: 1; }
 .fila-config p { margin: .15rem 0 0; font-size: .9rem; }
+.fila-config > div:first-child, .tarjeta { min-width: 0; }
+.tarjeta code { overflow-wrap: anywhere; word-break: break-all; }
 .fila-config--columna { flex-direction: column; align-items: stretch; }
 .fila-config--columna .formulario { margin-top: .75rem; }
+.tabla-envoltorio { overflow-x: auto; max-width: 100%; }
 .tabla { width: 100%; border-collapse: collapse; font-size: .9rem; margin-top: .5rem; }
+.tabla td, .tabla th { white-space: nowrap; }
 .tabla th { text-align: left; font-weight: 600; color: var(--gris-500); font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; padding: .5rem .6rem; border-bottom: 1px solid var(--gris-200); }
 .tabla td { padding: .6rem; border-bottom: 1px solid var(--gris-100); vertical-align: middle; }
 .tabla tr:last-child td { border-bottom: 0; }
@@ -324,8 +328,11 @@ select { width: auto; padding: .55rem .75rem; }
   .menu-item em { display: none; }
   .barra-pie { display: none; }
   .barra-superior { padding: .75rem 1rem; flex-wrap: wrap; }
+  .acciones-superior { flex-wrap: wrap; }
   .principal { padding: 1rem; }
+  .encabezado-pagina { flex-direction: column; align-items: stretch; }
   .fila-config { flex-direction: column; align-items: stretch; }
+  .fila-config .boton { width: 100%; }
   .acciones-codigo { grid-template-columns: 1fr; }
 }
 
