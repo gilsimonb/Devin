@@ -1,0 +1,24 @@
+{% extends "layout_auth.html" %}
+{% from "_macros.html" import campo_password, csrf %}
+{% block titulo %}Iniciar sesión{% endblock %}
+{% block encabezado %}
+<h2>Iniciar sesión</h2>
+<p class="texto-suave">Introduce tus credenciales para acceder a tu información.</p>
+{% endblock %}
+{% block contenido %}
+<form method="post" action="{{ url_for('auth.login') }}" class="formulario" novalidate data-validar>
+  {{ csrf() }}
+  <div class="campo">
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" name="usuario" value="{{ valores.usuario }}" autocomplete="username"
+           autocapitalize="off" spellcheck="false" required {% if not valores.usuario %}autofocus{% endif %}>
+  </div>
+  {{ campo_password('password', 'Contraseña', autocomplete='current-password') }}
+  <label class="casilla">
+    <input type="checkbox" name="recordar" value="1" {% if valores.recordar %}checked{% endif %}>
+    <span>Recordar mi usuario</span>
+  </label>
+  <button type="submit" class="boton boton--primario boton--ancho">Iniciar sesión</button>
+  <p class="centrado"><a href="{{ url_for('auth.recuperar_acceso') }}">¿Olvidaste tu contraseña?</a></p>
+</form>
+{% endblock %}

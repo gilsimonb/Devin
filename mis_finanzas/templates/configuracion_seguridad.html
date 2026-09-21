@@ -1,0 +1,156 @@
+{% extends "layout_app.html" %}
+{% from "_macros.html" import icono, csrf, campo_password %}
+{% block titulo %}Configuración · Seguridad{% endblock %}
+{% block contenido %}
+<div class="encabezado-pagina">
+  <div>
+    <h1>Configuración</h1>
+    <p class="texto-suave">Administra tus preferencias de seguridad y tus respaldos locales.</p>
+  </div>
+</div>
+
+<div class="configuracion">
+  <nav class="submenu" aria-label="Secciones de configuración">
+    <a class="submenu-item activo" href="{{ url_for('main.configuracion_seguridad') }}">{{ icono('shield') }} Seguridad</a>
+    <a class="submenu-item" href="#respaldos">{{ icono('database') }} Respaldo y restauración</a>
+    <a class="submenu-item" href="#auditoria">{{ icono('report') }} Actividad de seguridad</a>
+    <span class="submenu-item deshabilitado">{{ icono('info') }} Acerca de <em>v{{ APP_VERSION }}</em></span>
+  </nav>
+
+  <div class="configuracion-contenido">
+    <section class="tarjeta" id="seguridad">
+      <h2>{{ icono('shield') }} Seguridad</h2>
+
+      <div class="fila-config">
+        <div>
+          <strong>Usuario</strong>
+          <p class="texto-suave">@{{ cuenta.usuario }} · {{ cuenta.nombre }}</p>
+        </div>
+      </div>
+
+      <div class="fila-config">
+        <div>
+          <strong>Contraseña</strong>
+          <p class="texto-suave">Cámbiala periódicamente. Al hacerlo se cerrarán todas las sesiones abiertas.</p>
+        </div>
+        <a href="{{ url_for('auth.cambiar_password') }}" class="boton boton--secundario">{{ icono('key') }} Cambiar contraseña</a>
+      </div>
+
+      <div class="fila-config">
+        <div>
+          <strong>Bloqueo automático por inactividad</strong>
+          <p class="texto-suave">La aplicación se bloqueará sola si no detecta actividad durante este tiempo.</p>
+        </div>
+        <form method="post" action="{{ url_for('main.configuracion_inactividad') }}" class="formulario-en-linea">
+          {{ csrf() }}
+          <select name="minutos" aria-label="Minutos de inactividad">
+            {% for opcion in inactividad_opciones %}
+            <option value="{{ opcion }}" {% if opcion == inactividad_actual %}selected{% endif %}>{{ opcion }} minutos</option>
+            {% endfor %}
+          </select>
+          <button type="submit" class="boton boton--secundario">Guardar</button>
+        </form>
+      </div>
+
+      <div class="fila-config">
+        <div>
+          <strong>Código de recuperación</strong>
+          <p class="texto-suave">
+            {% if cuenta.recovery_code_used or not cuenta.recovery_code_hash %}
+              <span class="etiqueta etiqueta--ambar">Sin código vigente</span> Genera uno nuevo para poder recuperar el acceso si olvidas tu contraseña.
+            {% else %}
+              <span class="etiqueta etiqueta--verde">Vigente</span> Sólo puede usarse una vez. Si lo perdiste, genera uno nuevo (el anterior dejará de funcionar).
+            {% endif %}
+          </p>
+        </div>
+        <button type="button" class="boton boton--secundario" data-abrir="dialogo-codigo">{{ icono('key') }} Generar nuevo código</button>
+      </div>
+    </section>
+
+    <section class="tarjeta" id="respaldos">
+      <h2>{{ icono('database') }} Respaldo y restauración</h2>
+      <p class="texto-suave">Base de datos: <code>{{ ruta_db }}</code><br>Carpeta de respaldos: <code>{{ ruta_backups }}</code></p>
+
+      <div class="fila-config">
+        <div>
+          <strong>Crear respaldo</strong>
+          <p class="texto-suave">Genera una copia completa de tu base de datos en la carpeta de respaldos de este equipo.</p>
+        </div>
+        <form method="post" action="{{ url_for('main.crear_respaldo') }}">
+          {{ csrf() }}
+          <button type="submit" class="boton boton--primario">{{ icono('download') }} Crear respaldo ahora</button>
+        </form>
+      </div>
+
+      <div class="fila-config fila-config--columna">
+        <div>
+          <strong>Restaurar respaldo</strong>
+          <p class="texto-suave">Selecciona un archivo <code>.db</code>. Se validará antes de reemplazar los datos actuales y se guardará una copia previa automáticamente.</p>
+        </div>
+        <form method="post" action="{{ url_for('main.restaurar_respaldo') }}" enctype="multipart/form-data" class="formulario formulario--compacto" data-confirmar="Se reemplazará toda la información actual por la del respaldo. ¿Deseas continuar?">
+          {{ csrf() }}
+          <div class="campo">
+            <label for="archivo">Archivo de respaldo</label>
+            <input type="file" id="archivo" name="archivo" accept=".db,application/octet-stream,application/x-sqlite3" required>
+          </div>
+          {{ campo_password('password', 'Confirma tu contraseña', autocomplete='current-password', id='password_restaurar') }}
+          <button type="submit" class="boton boton--secundario">{{ icono('upload') }} Restaurar respaldo</button>
+        </form>
+      </div>
+
+      {% if respaldos %}
+      <h3>Respaldos recientes</h3>
+      <table class="tabla">
+        <thead><tr><th>Archivo</th><th>Fecha</th><th>Tamaño</th><th></th></tr></thead>
+        <tbody>
+          {% for r in respaldos %}
+          <tr>
+            <td><code>{{ r.nombre }}</code></td>
+            <td>{{ r.fecha.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ (r.tamano / 1024) | round(1) }} KB</td>
+            <td><a href="{{ url_for('main.descargar_respaldo', nombre=r.nombre) }}" class="boton boton--fantasma boton--pequeno">{{ icono('download') }} Descargar</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </section>
+
+    <section class="tarjeta" id="auditoria">
+      <h2>{{ icono('report') }} Actividad de seguridad reciente</h2>
+      {% if eventos %}
+      <table class="tabla">
+        <thead><tr><th>Evento</th><th>Detalle</th><th>Fecha</th></tr></thead>
+        <tbody>
+          {% for e in eventos %}
+          <tr>
+            <td><span class="etiqueta {% if 'FALLIDO' in e.evento or 'BLOQUEADA' in e.evento or 'RECHAZADO' in e.evento %}etiqueta--rojo{% elif 'CORRECTO' in e.evento or 'DESBLOQUEADA' in e.evento %}etiqueta--verde{% else %}etiqueta--gris{% endif %}">{{ e.evento }}</span></td>
+            <td class="texto-suave">{{ e.detalle or '—' }}</td>
+            <td class="texto-suave">{{ e.fecha }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="texto-suave">Todavía no hay eventos registrados.</p>
+      {% endif %}
+    </section>
+  </div>
+</div>
+
+<div class="modal" id="dialogo-codigo" hidden role="dialog" aria-modal="true" aria-labelledby="dialogo-codigo-titulo">
+  <div class="modal-caja">
+    <div class="icono-destacado">{{ icono('key') }}</div>
+    <h3 id="dialogo-codigo-titulo">Generar nuevo código de recuperación</h3>
+    <p class="texto-suave">El código anterior dejará de funcionar. Confirma tu contraseña para continuar; el nuevo código se mostrará una sola vez.</p>
+    <form method="post" action="{{ url_for('main.regenerar_codigo') }}" class="formulario" novalidate data-validar>
+      {{ csrf() }}
+      {{ campo_password('password', 'Contraseña', autocomplete='current-password', id='password_codigo') }}
+      <div class="modal-acciones">
+        <button type="button" class="boton boton--fantasma" data-cerrar>Cancelar</button>
+        <button type="submit" class="boton boton--primario">Generar código</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

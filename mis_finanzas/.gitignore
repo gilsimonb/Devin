@@ -1,0 +1,13 @@
+# Datos locales: nunca se suben al repositorio
+database/*.db
+database/*.db-wal
+database/*.db-shm
+instance/
+backups/*.db
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/

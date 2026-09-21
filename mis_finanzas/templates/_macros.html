@@ -1,0 +1,114 @@
+{# Macros reutilizables: iconos SVG, mensajes flash y campos de contraseña. #}
+
+{% macro icono(nombre, clase="icono") -%}
+<svg class="{{ clase }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+{%- if nombre == "home" -%}
+  <path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/>
+{%- elif nombre == "bank" -%}
+  <path d="M3 10h18L12 4z"/><path d="M5 10v8M10 10v8M14 10v8M19 10v8"/><path d="M3 20h18"/>
+{%- elif nombre == "card" -%}
+  <rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M7 15h3"/>
+{%- elif nombre == "chart" -%}
+  <path d="M4 19 10 12l4 4 6-8"/><path d="M4 21h16"/>
+{%- elif nombre == "swap" -%}
+  <path d="M7 7h11l-3-3"/><path d="M17 17H6l3 3"/>
+{%- elif nombre == "target" -%}
+  <circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>
+{%- elif nombre == "calendar" -%}
+  <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>
+{%- elif nombre == "report" -%}
+  <rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 13v4M12 9v8M16 11v6"/>
+{%- elif nombre == "settings" -%}
+  <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>
+{%- elif nombre == "lock" -%}
+  <rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+{%- elif nombre == "unlock" -%}
+  <rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/>
+{%- elif nombre == "logout" -%}
+  <path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M13 3h6v18h-6"/>
+{%- elif nombre == "eye" -%}
+  <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>
+{%- elif nombre == "eye-off" -%}
+  <path d="M3 3l18 18"/><path d="M10.6 10.6a3 3 0 0 0 4.2 4.2"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a17.6 17.6 0 0 1-3.1 3.9"/><path d="M6.6 6.6C3.9 8.4 2 12 2 12s3.5 7 10 7a10 10 0 0 0 4.1-.9"/>
+{%- elif nombre == "shield" -%}
+  <path d="M12 3l8 3v6c0 4.5-3.2 7.9-8 9-4.8-1.1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>
+{%- elif nombre == "key" -%}
+  <circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3"/><path d="M15 8l2 2"/><path d="M18 5l2 2"/>
+{%- elif nombre == "copy" -%}
+  <rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>
+{%- elif nombre == "download" -%}
+  <path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/>
+{%- elif nombre == "print" -%}
+  <path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="2"/><path d="M7 14h10v7H7z"/>
+{%- elif nombre == "upload" -%}
+  <path d="M12 16V5"/><path d="M7 10l5-5 5 5"/><path d="M4 20h16"/>
+{%- elif nombre == "check" -%}
+  <path d="M5 12l5 5L20 7"/>
+{%- elif nombre == "alert" -%}
+  <path d="M12 3l10 18H2z"/><path d="M12 10v5"/><circle cx="12" cy="18" r=".8"/>
+{%- elif nombre == "info" -%}
+  <circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="8" r=".8"/>
+{%- elif nombre == "clock" -%}
+  <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+{%- elif nombre == "wave" -%}
+  <path d="M7 11V6a1.5 1.5 0 0 1 3 0v5"/><path d="M10 10V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M13 10.5V6a1.5 1.5 0 0 1 3 0v8.5a6 6 0 0 1-6 6h-.5a6 6 0 0 1-5.2-3L2 14.5a1.6 1.6 0 0 1 2.7-1.6L7 15"/>
+{%- elif nombre == "arrow-left" -%}
+  <path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/>
+{%- elif nombre == "database" -%}
+  <ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>
+{%- endif -%}
+</svg>
+{%- endmacro %}
+
+{% macro logo(clase="logo") -%}
+<span class="{{ clase }}" aria-hidden="true">
+  <svg viewBox="0 0 48 48" fill="none">
+    <rect width="48" height="48" rx="12" fill="url(#g-{{ clase }})"/>
+    <defs><linearGradient id="g-{{ clase }}" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#1d4ed8"/><stop offset="1" stop-color="#0f2a5f"/></linearGradient></defs>
+    <path d="M24 36V22" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <path d="M24 26c0-6 4-10 10-10 0 6-4 10-10 10z" fill="#4ade80"/>
+    <path d="M24 30c0-6-4-10-10-10 0 6 4 10 10 10z" fill="#86efac"/>
+  </svg>
+</span>
+{%- endmacro %}
+
+{% macro mensajes() -%}
+{% with lista = get_flashed_messages(with_categories=true) %}
+{% if lista %}
+<div class="mensajes" role="status" aria-live="polite">
+  {% for categoria, texto in lista %}
+  <div class="mensaje mensaje--{{ categoria }}">
+    {% if categoria == 'error' %}{{ icono('alert') }}{% elif categoria == 'success' %}{{ icono('check') }}{% else %}{{ icono('info') }}{% endif %}
+    <span>{{ texto }}</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+{%- endmacro %}
+
+{% macro campo_password(nombre, etiqueta, autocomplete="current-password", medidor=false, minlength=None, placeholder="", id=None) -%}
+{% set id_campo = id or nombre %}
+<div class="campo">
+  <label for="{{ id_campo }}">{{ etiqueta }}</label>
+  <div class="campo-password">
+    <input type="password" id="{{ id_campo }}" name="{{ nombre }}" autocomplete="{{ autocomplete }}"
+           {% if minlength %}minlength="{{ minlength }}"{% endif %} required
+           {% if medidor %}data-medidor="{{ id_campo }}"{% endif %}
+           placeholder="{{ placeholder }}">
+    <button type="button" class="ver-password" data-toggle-password="{{ id_campo }}" aria-label="Mostrar contraseña" title="Mostrar u ocultar contraseña">
+      {{ icono('eye', 'icono icono-ver') }}{{ icono('eye-off', 'icono icono-ocultar') }}
+    </button>
+  </div>
+  {% if medidor %}
+  <div class="medidor" id="medidor-{{ id_campo }}" aria-live="polite">
+    <div class="medidor-barra"><span class="medidor-relleno"></span></div>
+    <small class="medidor-texto">Mínimo {{ minlength }} caracteres.</small>
+  </div>
+  {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro csrf() -%}
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+{%- endmacro %}

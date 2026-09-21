@@ -1,0 +1,34 @@
+{% extends "layout_auth.html" %}
+{% from "_macros.html" import icono, csrf %}
+{% block titulo %}Código de recuperación{% endblock %}
+{% block encabezado %}
+<div class="icono-destacado">{{ icono('key') }}</div>
+<h2 class="centrado">Guarda tu código de recuperación</h2>
+{% endblock %}
+{% block contenido %}
+<div class="codigo-recuperacion" id="codigo-recuperacion" data-codigo="{{ codigo }}">
+  <code class="codigo">{{ codigo }}</code>
+</div>
+<p class="texto-suave centrado">
+  Este código permite recuperar el acceso si olvidas tu contraseña.
+  <strong>Guárdalo en un lugar seguro. No podrá mostrarse nuevamente.</strong>
+</p>
+<div class="acciones-codigo">
+  <button type="button" class="boton boton--secundario" data-copiar-codigo>{{ icono('copy') }} Copiar código</button>
+  <button type="button" class="boton boton--secundario" data-descargar-codigo>{{ icono('download') }} Guardar respaldo</button>
+  <button type="button" class="boton boton--secundario" data-imprimir-codigo>{{ icono('print') }} Imprimir</button>
+</div>
+<form method="post" action="{{ url_for('auth.codigo_recuperacion_continuar') }}" class="formulario">
+  {{ csrf() }}
+  <label class="casilla">
+    <input type="checkbox" id="confirmo-codigo" required>
+    <span>Ya guardé mi código en un lugar seguro.</span>
+  </label>
+  <button type="submit" class="boton boton--primario boton--ancho" id="boton-continuar" disabled>Continuar</button>
+</form>
+<div class="solo-impresion">
+  <h1>{{ APP_NAME }} — Código de recuperación</h1>
+  <p class="codigo">{{ codigo }}</p>
+  <p>Este código permite restablecer la contraseña de la aplicación local {{ APP_NAME }}. Consérvalo en un lugar seguro.</p>
+</div>
+{% endblock %}
