@@ -1,0 +1,52 @@
+{% extends "layout_app.html" %}
+{% from "_macros.html" import icono, csrf %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+<div class="encabezado-pagina">
+  <div>
+    <h1>Hola, {{ cuenta.nombre }} {{ icono('wave', 'icono icono-saludo') }}</h1>
+    <p class="texto-suave">Bienvenido a {{ APP_NAME }}. Tu sesión está activa.</p>
+  </div>
+</div>
+
+<section class="rejilla rejilla--3">
+  <div class="tarjeta tarjeta-estado">
+    <div class="icono-destacado icono-destacado--verde">{{ icono('shield') }}</div>
+    <h3>Sesión protegida</h3>
+    <p class="texto-suave">Iniciaste sesión con tu contraseña local. Se bloqueará automáticamente tras {{ inactividad_minutos }} minutos sin actividad.</p>
+  </div>
+  <div class="tarjeta tarjeta-estado">
+    <div class="icono-destacado">{{ icono('database') }}</div>
+    <h3>Datos en este equipo</h3>
+    <p class="texto-suave">Toda tu información se guarda en una base de datos SQLite local. Nada se envía a internet.</p>
+  </div>
+  <div class="tarjeta tarjeta-estado">
+    <div class="icono-destacado icono-destacado--gris">{{ icono('clock') }}</div>
+    <h3>Último acceso</h3>
+    <p class="texto-suave">{% if cuenta.ultimo_acceso %}{{ cuenta.ultimo_acceso.strftime('%d/%m/%Y %H:%M') }}{% else %}Este es tu primer acceso.{% endif %}</p>
+  </div>
+</section>
+
+<section class="tarjeta tarjeta-bienvenida">
+  <div>
+    <h2>Tus módulos financieros llegarán pronto</h2>
+    <p class="texto-suave">Esta primera etapa se centra en el acceso y la seguridad. En las siguientes etapas aquí verás tu patrimonio, cuentas, tarjetas, inversiones (CETES, Fintual, BRIQ, SOFIPOs), movimientos, metas y reportes.</p>
+    <ul class="lista-estado">
+      <li><span class="punto"></span> Aplicación local</li>
+      <li>{{ icono('lock') }} Datos almacenados en este equipo</li>
+    </ul>
+  </div>
+  <div class="acciones-verticales">
+    <form method="post" action="{{ url_for('auth.bloquear') }}">
+      {{ csrf() }}
+      <input type="hidden" name="retorno" value="{{ url_for('main.inicio') }}">
+      <button type="submit" class="boton boton--primario boton--ancho">{{ icono('lock') }} Bloquear aplicación</button>
+    </form>
+    <a href="{{ url_for('main.configuracion_seguridad') }}" class="boton boton--secundario boton--ancho">{{ icono('settings') }} Configuración de seguridad</a>
+    <form method="post" action="{{ url_for('auth.logout') }}">
+      {{ csrf() }}
+      <button type="submit" class="boton boton--fantasma boton--ancho">{{ icono('logout') }} Cerrar sesión</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

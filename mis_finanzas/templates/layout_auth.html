@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icono, logo, mensajes %}
+{% block body_class %}pagina-auth{% endblock %}
+{% block cuerpo %}
+<main class="auth">
+  <section class="auth-panel">
+    <div class="auth-panel-contenido">
+      {{ logo('logo logo--grande') }}
+      <h1>{{ APP_NAME }}</h1>
+      <p class="auth-subtitulo">{{ APP_SUBTITULO }}</p>
+      <ul class="auth-beneficios">
+        <li>{{ icono('shield') }} Seguridad local con contraseña cifrada</li>
+        <li>{{ icono('database') }} Tus datos viven en una base SQLite en este equipo</li>
+        <li>{{ icono('lock') }} Bloqueo manual y automático por inactividad</li>
+      </ul>
+    </div>
+    <p class="auth-panel-pie">● Aplicación local · Sin conexión a internet</p>
+  </section>
+
+  <section class="auth-tarjeta-contenedor">
+    <div class="tarjeta auth-tarjeta">
+      <div class="auth-marca">
+        {{ logo('logo') }}
+        <div>
+          <strong>{{ APP_NAME }}</strong>
+          <span>{{ APP_SUBTITULO }}</span>
+        </div>
+      </div>
+      {% block encabezado %}{% endblock %}
+      {{ mensajes() }}
+      {% block contenido %}{% endblock %}
+      <div class="auth-pie">
+        <p class="nota-local">{{ icono('lock') }} Tus datos se almacenan únicamente en este equipo.</p>
+        <p class="nota-estado"><span class="punto"></span> Aplicación local · Sin conexión a internet</p>
+      </div>
+    </div>
+    <p class="version">v{{ APP_VERSION }}</p>
+  </section>
+</main>
+{% endblock %}

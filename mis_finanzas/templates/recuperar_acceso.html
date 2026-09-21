@@ -1,0 +1,22 @@
+{% extends "layout_auth.html" %}
+{% from "_macros.html" import campo_password, csrf, icono %}
+{% block titulo %}Recuperar acceso{% endblock %}
+{% block encabezado %}
+<div class="icono-destacado">{{ icono('key') }}</div>
+<h2 class="centrado">Recuperar acceso</h2>
+<p class="texto-suave centrado">Introduce el código de recuperación que guardaste al crear tu cuenta y define una nueva contraseña.</p>
+{% endblock %}
+{% block contenido %}
+<form method="post" action="{{ url_for('auth.recuperar_acceso') }}" class="formulario" novalidate data-validar>
+  {{ csrf() }}
+  <div class="campo">
+    <label for="codigo">Código de recuperación</label>
+    <input type="text" id="codigo" name="codigo" autocomplete="off" autocapitalize="characters" spellcheck="false"
+           placeholder="XXXX-XXXX-XXXX-XXXX" class="entrada-codigo" data-formato-codigo required autofocus>
+  </div>
+  {{ campo_password('password_nueva', 'Nueva contraseña', autocomplete='new-password', medidor=true, minlength=min_password) }}
+  {{ campo_password('confirmar_password', 'Confirmar contraseña', autocomplete='new-password', minlength=min_password) }}
+  <button type="submit" class="boton boton--primario boton--ancho">Restablecer acceso</button>
+  <p class="centrado"><a href="{{ url_for('auth.login') }}" class="enlace-volver">{{ icono('arrow-left') }} Volver al inicio de sesión</a></p>
+</form>
+{% endblock %}

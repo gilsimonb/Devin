@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icono, logo, mensajes, csrf %}
+{% block body_class %}pagina-app{% endblock %}
+{% block body_attrs %}data-inactividad-minutos="{{ inactividad_minutos or 30 }}" data-aviso-segundos="{{ AVISO_SEGUNDOS }}" data-url-bloquear="{{ url_for('auth.bloquear') }}"{% endblock %}
+{% block cuerpo %}
+<div class="app">
+  <aside class="barra-lateral">
+    <a class="barra-marca" href="{{ url_for('main.inicio') }}">
+      {{ logo('logo') }}
+      <div><strong>{{ APP_NAME }}</strong><span>{{ APP_SUBTITULO }}</span></div>
+    </a>
+    <nav class="menu" aria-label="Módulos">
+      {% for modulo in MODULOS %}
+        {% if modulo.disponible %}
+          <a class="menu-item {% if seccion == modulo.clave %}activo{% endif %}" href="{{ url_for(modulo.endpoint) }}">
+            {{ icono(modulo.icono) }}<span>{{ modulo.nombre }}</span>
+          </a>
+        {% else %}
+          <span class="menu-item deshabilitado" title="Disponible en una etapa posterior" aria-disabled="true">
+            {{ icono(modulo.icono) }}<span>{{ modulo.nombre }}</span><em>Pronto</em>
+          </span>
+        {% endif %}
+      {% endfor %}
+    </nav>
+    <div class="barra-pie">
+      <p class="nota-estado"><span class="punto"></span> Aplicación local</p>
+      <p class="nota-local">{{ icono('lock') }} Datos almacenados en este equipo</p>
+    </div>
+  </aside>
+
+  <div class="contenido">
+    <header class="barra-superior">
+      <div class="usuario-actual">
+        <span class="avatar">{{ usuario_actual.nombre[:1]|upper }}</span>
+        <div><strong>{{ usuario_actual.nombre }}</strong><span>@{{ usuario_actual.usuario }}</span></div>
+      </div>
+      <div class="acciones-superior">
+        <form method="post" action="{{ url_for('auth.bloquear') }}">
+          {{ csrf() }}
+          <input type="hidden" name="retorno" value="{{ request.full_path.rstrip('?') }}">
+          <button type="submit" class="boton boton--secundario">{{ icono('lock') }} Bloquear aplicación</button>
+        </form>
+        <form method="post" action="{{ url_for('auth.logout') }}">
+          {{ csrf() }}
+          <button type="submit" class="boton boton--fantasma">{{ icono('logout') }} Cerrar sesión</button>
+        </form>
+      </div>
+    </header>
+    <main class="principal">
+      {{ mensajes() }}
+      {% block contenido %}{% endblock %}
+    </main>
+  </div>
+</div>
+
+<div class="modal" id="aviso-inactividad" hidden role="dialog" aria-modal="true" aria-labelledby="aviso-titulo">
+  <div class="modal-caja">
+    <div class="icono-destacado icono-destacado--ambar">{{ icono('clock') }}</div>
+    <h3 id="aviso-titulo">Tu aplicación se bloqueará pronto por inactividad.</h3>
+    <p class="texto-suave">Se bloqueará en <strong id="aviso-segundos">{{ AVISO_SEGUNDOS }}</strong> segundos.</p>
+    <div class="modal-acciones">
+      <button type="button" class="boton boton--primario" data-continuar-sesion>Continuar sesión</button>
+      <form method="post" action="{{ url_for('auth.bloquear') }}" id="form-bloqueo-auto">
+        {{ csrf() }}
+        <input type="hidden" name="motivo" value="inactividad">
+        <input type="hidden" name="retorno" value="{{ request.full_path.rstrip('?') }}">
+        <button type="submit" class="boton boton--secundario">Bloquear ahora</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

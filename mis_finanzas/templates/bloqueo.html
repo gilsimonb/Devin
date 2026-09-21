@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "_macros.html" import campo_password, csrf, icono, logo, mensajes %}
+{% block titulo %}Aplicación bloqueada{% endblock %}
+{% block body_class %}pagina-bloqueo{% endblock %}
+{% block cuerpo %}
+<main class="bloqueo">
+  <div class="tarjeta bloqueo-tarjeta">
+    <div class="auth-marca auth-marca--centrada">
+      {{ logo('logo') }}
+      <div><strong>{{ APP_NAME }}</strong><span>{{ APP_SUBTITULO }}</span></div>
+    </div>
+    <div class="icono-destacado icono-destacado--gris">{{ icono('lock') }}</div>
+    <h2 class="centrado">Aplicación bloqueada</h2>
+    <p class="texto-suave centrado">Hola, {{ cuenta.nombre }}. Para continuar, introduce nuevamente tu contraseña.</p>
+    {{ mensajes() }}
+    <form method="post" action="{{ url_for('auth.desbloquear') }}" class="formulario" novalidate data-validar>
+      {{ csrf() }}
+      {{ campo_password('password', 'Contraseña', autocomplete='current-password') }}
+      <button type="submit" class="boton boton--primario boton--ancho">{{ icono('unlock') }} Desbloquear</button>
+    </form>
+    <form method="post" action="{{ url_for('auth.logout') }}" class="centrado">
+      {{ csrf() }}
+      <button type="submit" class="boton boton--enlace">Cerrar sesión</button>
+    </form>
+    <p class="nota-estado centrado"><span class="punto"></span> Aplicación local · Tu sesión sigue activa</p>
+  </div>
+</main>
+{% endblock %}

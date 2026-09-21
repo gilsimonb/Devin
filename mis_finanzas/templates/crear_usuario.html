@@ -1,0 +1,25 @@
+{% extends "layout_auth.html" %}
+{% from "_macros.html" import campo_password, csrf %}
+{% block titulo %}Crear usuario local{% endblock %}
+{% block encabezado %}
+<h2>Crear usuario local</h2>
+<p class="texto-suave">Es la primera vez que abres {{ APP_NAME }}. Crea la cuenta con la que protegerás tu información.</p>
+{% endblock %}
+{% block contenido %}
+<form method="post" action="{{ url_for('auth.crear_usuario') }}" class="formulario" novalidate data-validar>
+  {{ csrf() }}
+  <div class="campo">
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" name="usuario" value="{{ valores.usuario }}" autocomplete="username"
+           autocapitalize="off" spellcheck="false" minlength="3" maxlength="40" required autofocus>
+    <small class="ayuda">Lo usarás para iniciar sesión. Sin espacios.</small>
+  </div>
+  <div class="campo">
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" name="nombre" value="{{ valores.nombre }}" autocomplete="name" maxlength="80" required>
+  </div>
+  {{ campo_password('password', 'Contraseña', autocomplete='new-password', medidor=true, minlength=min_password) }}
+  {{ campo_password('confirmar_password', 'Confirmar contraseña', autocomplete='new-password', minlength=min_password) }}
+  <button type="submit" class="boton boton--primario boton--ancho">Crear cuenta</button>
+</form>
+{% endblock %}

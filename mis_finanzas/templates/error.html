@@ -1,0 +1,11 @@
+{% extends "layout_auth.html" %}
+{% from "_macros.html" import icono %}
+{% block titulo %}Error {{ codigo }}{% endblock %}
+{% block encabezado %}
+<div class="icono-destacado icono-destacado--rojo">{{ icono('alert') }}</div>
+<h2 class="centrado">Algo no salió bien</h2>
+<p class="texto-suave centrado">{{ mensaje }}</p>
+{% endblock %}
+{% block contenido %}
+<a href="{{ url_for('auth.raiz') }}" class="boton boton--primario boton--ancho">Volver al inicio</a>
+{% endblock %}

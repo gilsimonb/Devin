@@ -1,0 +1,11 @@
+{% extends "layout_auth.html" %}
+{% from "_macros.html" import icono %}
+{% block titulo %}Sesión expirada{% endblock %}
+{% block encabezado %}
+<div class="icono-destacado icono-destacado--gris">{{ icono('clock') }}</div>
+<h2 class="centrado">Tu sesión ha expirado</h2>
+<p class="texto-suave centrado">Por seguridad, la sesión se cerró automáticamente tras un periodo de inactividad. Tu información sigue guardada en este equipo.</p>
+{% endblock %}
+{% block contenido %}
+<a href="{{ url_for('auth.login') }}" class="boton boton--primario boton--ancho">Iniciar sesión nuevamente</a>
+{% endblock %}
